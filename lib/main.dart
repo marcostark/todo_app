@@ -6,8 +6,9 @@ import 'package:todo_app/components/todo_dialog.dart';
 
 void main() {
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     home: Home(),
-    theme: ThemeData(
+    theme: ThemeData(      
         // hintColor: Colors.cyan,
         // primaryColor: Colors.white),
         primaryColor: Color.fromRGBO(58, 66, 86, 1.0)),
@@ -40,7 +41,7 @@ class _HomeState extends State<Home> {
   void _addToDo() async {
     final todo = await showDialog(
         context: context,
-        builder: (BuildContext context) {
+        builder: (BuildContext context) {          
           return TodoDialog();
         });
 
@@ -104,20 +105,6 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-
-  // final topAppBar =AppBar(
-  //   elevation: 0.1,
-  //   backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
-  //   title: Text(widget.title),
-  //   actions: <Widget>[
-  //     IconButton(
-  //       icon: Icon(Icons.list),
-  //       onPressed: () {}
-  //     )
-  //   ],
-  // ) ;
-
-  
 
   Widget _getBuildItem(BuildContext context, int index) {
     return Dismissible(
