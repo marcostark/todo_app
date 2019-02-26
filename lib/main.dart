@@ -8,8 +8,9 @@ void main() {
   runApp(MaterialApp(
     home: Home(),
     theme: ThemeData(
-        hintColor: Colors.cyan,
-        primaryColor: Colors.white),
+        // hintColor: Colors.cyan,
+        // primaryColor: Colors.white),
+        primaryColor: Color.fromRGBO(58, 66, 86, 1.0)),
   ));
 }
 
@@ -19,13 +20,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   final _toDoController = TextEditingController();
 
   List _todoList = [];
   Map<String, dynamic> _lastRemoved;
   int _lastRemovedPos;
-
 
   @override
   void initState() {
@@ -36,18 +35,16 @@ class _HomeState extends State<Home> {
         _todoList = json.decode(data);
       });
     });
-
   }
 
   void _addToDo() async {
     final todo = await showDialog(
         context: context,
-      builder:(BuildContext context) {
-        return TodoDialog();
-      }
-    );
+        builder: (BuildContext context) {
+          return TodoDialog();
+        });
 
-    if(todo != null) {
+    if (todo != null) {
       setState(() {
         Map<String, dynamic> newTask = Map();
         newTask["title"] = todo;
@@ -55,7 +52,7 @@ class _HomeState extends State<Home> {
         newTask["concluida"] = false;
         _todoList.add(newTask);
         _saveData();
-    });
+      });
     }
   }
 
@@ -63,10 +60,13 @@ class _HomeState extends State<Home> {
     await Future.delayed(Duration(seconds: 1));
 
     setState(() {
-      _todoList.sort((a, b){
-        if(a["concluida"] && !b["concluida"]) return 1;
-        else if(!a["concluida"] && b["concluida"]) return -1;
-        else return 0;
+      _todoList.sort((a, b) {
+        if (a["concluida"] && !b["concluida"])
+          return 1;
+        else if (!a["concluida"] && b["concluida"])
+          return -1;
+        else
+          return 0;
       });
 
       _saveData();
@@ -78,31 +78,46 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: Colors.black,
+      backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
       appBar: AppBar(
-        title: Text("TODO List", style: TextStyle(color: Colors.white)),
+        title: Text("TODO", style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.cyan,
         centerTitle: true,
       ),
       body: Column(
         children: <Widget>[
           Expanded(
-            child: RefreshIndicator(onRefresh: _refresh,
-                child: ListView.builder(
-                    padding: EdgeInsets.only(top: 10.0),
-                    itemCount: _todoList.length,
-                    itemBuilder: _getBuildItem),
+            child: RefreshIndicator(
+              onRefresh: _refresh,
+              child: ListView.builder(
+                  padding: EdgeInsets.only(top: 10.0),
+                  itemCount: _todoList.length,
+                  itemBuilder: _getBuildItem),
             ),
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton (
+      floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.cyan,
         child: Icon(Icons.add),
         onPressed: _addToDo,
       ),
     );
   }
+
+  // final topAppBar =AppBar(
+  //   elevation: 0.1,
+  //   backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
+  //   title: Text(widget.title),
+  //   actions: <Widget>[
+  //     IconButton(
+  //       icon: Icon(Icons.list),
+  //       onPressed: () {}
+  //     )
+  //   ],
+  // ) ;
+
+  
 
   Widget _getBuildItem(BuildContext context, int index) {
     return Dismissible(
@@ -111,27 +126,46 @@ class _HomeState extends State<Home> {
         color: Colors.redAccent,
         child: Align(
           alignment: Alignment(-0.9, 0.0),
-          child: Icon(Icons.delete, color: Colors.white,),
+          child: Icon(
+            Icons.delete,
+            color: Colors.white,
+          ),
         ),
       ),
       direction: DismissDirection.startToEnd,
-      child: CheckboxListTile(
-        title: Text(_todoList[index]["title"], style: TextStyle(color: Colors.black54),),
-        value: _todoList[index]["concluida"],
-        secondary: CircleAvatar(
-          child: Icon(_todoList[index]["concluida"] ?
-          Icons.check : Icons.timer, color: Colors.white,),
-          backgroundColor: Colors.cyan,
+
+      child: Card(
+        elevation: 8.0,        
+        margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+        child: Container(
+          padding: new EdgeInsets.all(10.0),
+          decoration: BoxDecoration(color: Color.fromRGBO(64, 75, 96, .9)),          
+          child: CheckboxListTile(            
+            title: Text(
+              _todoList[index]["title"],
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+            value: _todoList[index]["concluida"],
+            secondary: CircleAvatar(
+              child: Icon(
+                _todoList[index]["concluida"] ? Icons.check : Icons.timer,
+                color: Colors.white,
+              ),
+              backgroundColor: Colors.cyan,
+            ),
+            onChanged: (check) {
+              setState(() {
+                _todoList[index]["concluida"] = check;
+                _saveData();
+              });
+            },
+            activeColor: Colors.cyan,
+          ),
+
+          
         ),
-        onChanged: (check){
-          setState(() {
-            _todoList[index]["concluida"] = check;
-            _saveData();
-          });
-        },
-        activeColor: Colors.cyan,
       ),
-      onDismissed: (direction){
+      onDismissed: (direction) {
         setState(() {
           _lastRemoved = Map.from(_todoList[index]);
           _lastRemovedPos = index;
