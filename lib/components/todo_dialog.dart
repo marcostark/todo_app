@@ -15,9 +15,10 @@ class TodoDialog extends StatelessWidget {
         ),
         content: TextField(
           cursorColor: Colors.white,
+          style: TextStyle(color: Colors.white, fontSize: 18),
           controller: controller,
           autofocus: true,
-          decoration: InputDecoration(
+          decoration: InputDecoration(            
             focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: Colors.cyan),
             ),
