@@ -3,7 +3,7 @@
 Simples 'TODO List' desenvolvido em flutter
 
 ## Telas
-![Tela Principal](lib/imgs/index.jpeg)
+![Tela Principal](lib/screenshots/index.jpeg)
 
-![Inserir Tarefa](lib/imgs/dialog.jpeg)
+![Inserir Tarefa](lib/screenshots/dialog.jpeg)
 
