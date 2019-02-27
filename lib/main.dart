@@ -130,12 +130,18 @@ class _HomeState extends State<Home> {
           child: CheckboxListTile(            
             title: Text(
               _todoList[index]["title"],
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: Colors.white, 
+                fontWeight: FontWeight.bold,
+                // decoration: _todoList[index]["concluida"] 
+                //   ? TextDecoration.lineThrough
+                //   :TextDecoration.none
+                ),
             ),
             value: _todoList[index]["concluida"],
             secondary: CircleAvatar(
               child: Icon(
-                _todoList[index]["concluida"] ? Icons.check : Icons.timer,
+                _todoList[index]["concluida"] ? Icons.check : Icons.priority_high,
                 color: Colors.white,
               ),
               backgroundColor: Colors.cyan,
